@@ -7,6 +7,7 @@ const common = z.object({
   description: z.string().min(1),
   category: z.string().min(1),
   date: z.coerce.date(),
+  publishedAt: z.coerce.date().optional(),
   draft: z.boolean().default(false),
 });
 
