@@ -88,3 +88,89 @@ footer div { gap: 1.2rem; }
   footer { align-items: flex-start; flex-wrap: wrap; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Homepage: premium blue digital creator identity */
+:root {
+  --bg: #080f1d;
+  --panel: #101c30;
+  --text: #edf4ff;
+  --muted: #a8b8d0;
+  --line: #243650;
+  --gold: #286cff;
+}
+body.home-shell { background: #080f1d; color: #edf4ff; }
+.home-shell .mast { border-color: #1e3049; background: rgba(8,15,29,.92); }
+.home-shell .brand { width: min(315px, 46vw); }
+.home-shell nav a { color: #a8b8d0; }
+.home-shell nav a[aria-current], .home-shell nav a:hover { color: #69a3ff; border-color: #286cff; }
+.home-shell .skip { background: #286cff; color: #fff; }
+.home-shell .wrap { width: min(82rem, 88%); }
+.home-page .hero { min-height: min(710px, calc(100svh - 5rem)); grid-template-columns: minmax(0, .92fr) minmax(25rem, 1.08fr); gap: clamp(2rem, 5vw, 5.5rem); padding-block: clamp(4rem, 8vw, 7.5rem); }
+.home-page .hero-copy { position: relative; z-index: 1; }
+.home-page .eyebrow { color: #68bfff; font-size: .75rem; letter-spacing: .17em; }
+.home-page .eyebrow i { width: 2rem; height: 2px; background: linear-gradient(90deg,#286cff,#42d4ff); }
+.hero-kicker { margin: 2.2rem 0 .8rem; color: #6f8eb9; font: 600 .8rem/1.4 "IBM Plex Mono",Consolas,monospace; letter-spacing: .2em; }
+.home-page .hero h1 { margin: 0 0 1.5rem; color: #f2f7ff; font: 750 clamp(3.5rem,6.5vw,6.7rem)/1.12 "Inter","Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; letter-spacing: -.065em; }
+.home-page .hero h1 span { color: #58a1ff; background: linear-gradient(100deg,#4e8dff 12%,#4bd5f2 88%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.home-page .intro { max-width: 30rem; color: #a8b8d0; font-size: clamp(1rem,1.35vw,1.12rem); line-height: 1.95; }
+.home-page .actions { gap: 1.25rem; margin-top: 2.2rem; }
+.home-page .button { border: 1px solid #4288ff; border-radius: .45rem; background: linear-gradient(110deg,#286cff,#287fe8); color: #fff; padding: .85rem 1.25rem; box-shadow: 0 10px 35px rgba(40,108,255,.22); transition: transform .2s, box-shadow .2s; }
+.home-page .button:hover { transform: translateY(-2px); box-shadow: 0 14px 38px rgba(40,108,255,.34); background: linear-gradient(110deg,#397dff,#36a4ed); }
+.home-page .text-link { color: #c3d4ed; text-decoration-color: #3a5e8c; }
+.home-page .text-link:hover { color: #6fcaff; }
+.hero-visual { min-height: 30rem; position: relative; display: grid; place-items: center; isolation: isolate; overflow: hidden; border: 1px solid rgba(80,133,204,.2); border-radius: 1.5rem; background: radial-gradient(ellipse at 50% 46%,rgba(29,93,184,.24),transparent 48%),linear-gradient(145deg,rgba(16,34,61,.72),rgba(8,17,32,.18)); }
+.visual-grid { position:absolute; inset:0; z-index:-2; opacity:.24; background-image:linear-gradient(rgba(87,145,218,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(87,145,218,.16) 1px,transparent 1px); background-size:42px 42px; mask-image:radial-gradient(ellipse at center,#000 10%,transparent 76%); }
+.visual-orbit { position:absolute; width: min(72%,25rem); aspect-ratio:1; border:1px solid rgba(65,151,255,.62); border-radius:50%; box-shadow:0 0 34px rgba(35,115,255,.12),inset 0 0 30px rgba(35,115,255,.08); }
+.orbit-one { transform:rotateX(68deg) rotateZ(-28deg); }
+.orbit-two { transform:rotateX(68deg) rotateZ(52deg) scale(.82); border-color:rgba(66,212,255,.55); }
+.orbit-three { transform:rotateY(68deg) rotateZ(28deg) scale(.68); border-color:rgba(73,127,255,.55); }
+.visual-core { width:9rem; aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.3rem; border:1px solid rgba(112,185,255,.55); border-radius:2rem; background:linear-gradient(145deg,rgba(30,91,180,.42),rgba(9,22,43,.9)); box-shadow:0 0 75px rgba(35,117,255,.3),inset 0 0 30px rgba(60,156,255,.12); transform:rotate(-8deg); }
+.visual-core strong { color:#e9f5ff; font:800 5rem/.95 "Inter","Segoe UI",sans-serif; text-shadow:0 0 28px rgba(66,174,255,.65); }
+.visual-core span { color:#8bcaff; font:600 .48rem/1.4 "IBM Plex Mono",monospace; letter-spacing:.13em; }
+.visual-tag { position:absolute; display:flex; flex-direction:column; gap:.25rem; padding:.8rem 1rem; border:1px solid rgba(102,156,220,.25); border-radius:.65rem; background:rgba(9,20,38,.78); box-shadow:0 12px 36px rgba(0,0,0,.18); backdrop-filter:blur(12px); }
+.visual-tag span,.visual-caption { color:#65bfff; font:600 .65rem/1.4 "IBM Plex Mono",Consolas,monospace; letter-spacing:.13em; }
+.visual-tag strong { color:#dceaff; font-size:.85rem; font-weight:600; }
+.tag-top { top:12%; right:7%; }
+.tag-bottom { bottom:16%; left:6%; }
+.visual-caption { position:absolute; right:7%; bottom:5%; color:#6c829f; }
+.feature-strip { display:grid; grid-template-columns:repeat(3,1fr); margin:0 0 2rem; border-block:1px solid #223650; }
+.feature-item { padding:1.5rem clamp(.8rem,2.5vw,2.2rem); border-right:1px solid #223650; }
+.feature-item:last-child { border-right:0; }
+.feature-item span { display:block; margin-bottom:.55rem; color:#58a9ff; font:600 .68rem/1.4 "IBM Plex Mono",Consolas,monospace; letter-spacing:.14em; }
+.feature-item strong { color:#edf4ff; font-size:1.08rem; }
+.feature-item p,.section-description { margin:.25rem 0 0; color:#8fa3bf; font-size:.9rem; }
+.home-page .shelf { padding:3.5rem 0 4rem; border-color:#223650; }
+.home-page .section-head { align-items:end; margin-bottom:1.7rem; }
+.home-page .section-head .eyebrow { margin-bottom:.45rem; }
+.home-page h2 { color:#edf4ff; font-size:clamp(1.7rem,3vw,2.35rem); letter-spacing:-.035em; }
+.home-page .section-description { margin-top:.4rem; }
+.home-page .entries a { padding:1.5rem; border-color:#263b59; border-radius:.75rem; background:linear-gradient(145deg,#111f34,#0d1829); transition:transform .2s,border-color .2s,box-shadow .2s; }
+.home-page .entries a:hover { transform:translateY(-3px); border-color:#347bdb; box-shadow:0 14px 38px rgba(0,0,0,.18); }
+.home-page .entry-meta { color:#66baff; }
+.home-page .entry-meta time { color:#8298b7; }
+.home-page .entries h3 { color:#edf4ff; font-size:1.18rem; }
+.home-page .entries p { color:#9aacc5; }
+.home-page .text-link:hover,.home-page .entries a:hover h3 { color:#71caff; }
+@media (max-width: 56rem) {
+  .home-page .hero { min-height:0; grid-template-columns:1fr 1fr; gap:1.5rem; padding-block:4rem; }
+  .hero-visual { min-height:25rem; }
+}
+@media (max-width: 42rem) {
+  .home-shell .wrap { width:min(100% - 2rem,82rem); }
+  .home-page .hero { grid-template-columns:1fr; padding-block:3rem 2.5rem; gap:2rem; }
+  .home-page .hero h1 { font-size:clamp(3.3rem,14vw,5rem); }
+  .hero-kicker { margin-top:1.5rem; }
+  .hero-visual { min-height:23rem; border-radius:1rem; }
+  .visual-core { width:7.5rem; }
+  .visual-core strong { font-size:4.2rem; }
+  .visual-tag { padding:.65rem .75rem; }
+  .visual-tag strong { font-size:.72rem; }
+  .feature-strip { grid-template-columns:1fr; }
+  .feature-item { padding:1rem .25rem; border-right:0; border-bottom:1px solid #223650; }
+  .feature-item:last-child { border-bottom:0; }
+  .home-page .shelf { padding-block:2.5rem; }
+  .home-page .section-head { align-items:flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-page .button,.home-page .entries a { transition:none; }
+}
