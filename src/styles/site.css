@@ -17,9 +17,8 @@ a:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
 .mast { border-bottom: 1px solid var(--line); }
 .mast-inner, nav, .brand, .actions, .entry-meta, .section-head, footer, footer div, figcaption { display: flex; align-items: center; }
 .mast-inner { min-height: 5rem; justify-content: space-between; gap: 1.5rem; }
-.brand { gap: .8rem; font-size: .94rem; font-weight: 750; letter-spacing: .05em; white-space: nowrap; }
-.brand b { color: var(--muted); font-weight: 500; }
-.mark { display: grid; width: 2.15rem; height: 2.15rem; place-items: center; background: var(--gold); color: var(--bg); font: bold 2.05rem/1 Georgia, serif; border-radius: .32rem; }
+.brand { width: min(315px, 46vw); flex: 0 0 auto; white-space: nowrap; }
+.brand-logo { display: block; width: 100%; height: auto; }
 nav { gap: clamp(.85rem, 2.2vw, 2rem); flex-wrap: wrap; }
 nav a { padding: .6rem 0; font-size: .92rem; color: var(--muted); border-bottom: 1px solid transparent; }
 nav a[aria-current], nav a:hover { color: var(--gold); border-color: var(--gold); }
