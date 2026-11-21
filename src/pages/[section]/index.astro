@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryList from '../../components/EntryList.astro';
+import { sections, sectionKeys } from '../../lib/library';
+export function getStaticPaths() { return sectionKeys.map(section => ({ params: { section }, props: { section } })); }
+const { section } = Astro.props;
+const info = sections[section];
+---
+<Base title={info.label} description={info.description}>
+  <header class="page-head"><p class="eyebrow">{info.en}</p><h1>{info.label}</h1><p class="intro">{info.description}</p></header>
+  <section class="archive" aria-label={info.label}><EntryList section={section} /></section>
+</Base>

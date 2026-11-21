@@ -1,0 +1,15 @@
+---
+import { dateLabel, entries, type Section } from '../lib/library';
+interface Props { section: Section; limit?: number }
+const { section, limit } = Astro.props;
+const rows = (await entries(section)).slice(0, limit);
+---
+<ul class="entries">
+  {rows.map(({ id, data }) => <li>
+    <a href={`/${section}/${id}/`}>
+      <div class="entry-meta"><span>{data.category}</span><time datetime={dateLabel(data.date)}>{dateLabel(data.date)}</time></div>
+      <h3>{data.title}</h3><p>{data.description}</p>
+    </a>
+  </li>)}
+</ul>
+{rows.length === 0 && <p>该栏目正在整理，稍后再来看看。</p>}

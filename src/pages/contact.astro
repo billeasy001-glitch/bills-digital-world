@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import { github } from '../lib/library';
+---
+<Base title="联系 Bill" description="通过 GitHub 反馈网站问题、建议教程选题或讨论公开项目。">
+  <div class="reading"><header class="page-head"><p class="eyebrow">Contact</p><h1>联系与交流</h1><p class="intro">发现教程有一步说得不够清楚，或有想讨论的项目？可以在网站仓库里给我留言。</p></header>
+  <div class="prose"><h2>提交公开留言</h2><p>请附上相关页面地址，并说明你尝试过的步骤或希望补充的内容。GitHub Issue 对所有人可见，请省略手机号、客户资料和登录信息。</p>
+  <a class="button" href={github + '/issues/new'}>在 GitHub 留言</a>
+  <h2>跟进已有讨论</h2><p><a href={github + '/issues'}>查看已有留言</a>，在对应讨论下补充信息。也可以通过<a href="https://github.com/billeasy001-glitch">我的 GitHub 主页</a>了解公开项目。</p></div></div>
+</Base>
