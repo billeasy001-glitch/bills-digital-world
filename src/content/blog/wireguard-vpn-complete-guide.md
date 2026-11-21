@@ -3,7 +3,7 @@ title: "从零搭建自己的 VPN 服务器：WireGuard 完整搭建与稳定性
 description: "从 VPS 服务器选购、Ubuntu 初始化、SSH 连接，到 WireGuard 安装、客户端配置、握手验证、NAT、MTU 优化、速度测试和长期稳定性测试。A practical bilingual guide to deploying and optimizing WireGuard on Ubuntu."
 category: "技术教程 / Technology"
 date: 2026-11-22
-draft: true
+draft: false
 ---
 
 # 从零搭建自己的 VPN 服务器：WireGuard 完整搭建与稳定性优化教程
@@ -257,9 +257,7 @@ uname -a
 cat /etc/os-release
 ```
 
-本项目历史环境中使用过 Ubuntu 26.04 LTS。
-
-其他 Ubuntu LTS 版本也可以按照相同的基本思路部署，但具体软件包和系统配置应以实际版本为准。
+本教程以 Ubuntu LTS 为目标环境。不同 LTS 版本的软件包、默认防火墙状态和网络配置可能不同，执行前请以 `cat /etc/os-release` 的实际输出及对应版本文档为准。不要把某个版本的默认防火墙状态套用到另一版本。
 
 ## 4.2 查看 CPU 和内存
 
@@ -494,9 +492,9 @@ ListenPort = 51820
 PrivateKey = SERVER_PRIVATE_KEY
 MTU = 1380
 
-PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -s 10.66.66.0/24 -o ens17 -j MASQUERADE; iptables -t mangle -A FORWARD -o %i -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu; iptables -t mangle -A FORWARD -i %i -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+PostUp = iptables -A FORWARD -i %i -o ens17 -s 10.66.66.0/24 -j ACCEPT; iptables -A FORWARD -i ens17 -o %i -d 10.66.66.0/24 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT; iptables -t nat -A POSTROUTING -s 10.66.66.0/24 -o ens17 -j MASQUERADE; iptables -t mangle -A FORWARD -o ens17 -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu; iptables -t mangle -A FORWARD -o %i -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -s 10.66.66.0/24 -o ens17 -j MASQUERADE; iptables -t mangle -D FORWARD -o %i -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu; iptables -t mangle -D FORWARD -i %i -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+PostDown = iptables -D FORWARD -i %i -o ens17 -s 10.66.66.0/24 -j ACCEPT; iptables -D FORWARD -i ens17 -o %i -d 10.66.66.0/24 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT; iptables -t nat -D POSTROUTING -s 10.66.66.0/24 -o ens17 -j MASQUERADE; iptables -t mangle -D FORWARD -o ens17 -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu; iptables -t mangle -D FORWARD -o %i -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
 
 [Peer]
 PublicKey = CLIENT1_PUBLIC_KEY
@@ -513,8 +511,9 @@ AllowedIPs = 10.66.66.3/32
 2. CLIENT1_PUBLIC_KEY 和 CLIENT2_PUBLIC_KEY 替换为真实客户端公钥。
 3. 如果出口网卡不是 ens17，必须替换。
 4. 不同客户端必须使用不同隧道 IP。
-5. 这份示例使用较宽的 FORWARD 放行规则，部署在已有复杂防火墙的服务器上之前，需要先审查现有规则和访问范围。
-6. 不要直接覆盖原有防火墙配置。
+5. 这份示例只允许 VPN 子网从 wg0 转发到指定出口网卡 ens17，并允许已建立连接的返回流量；请将 ens17 替换为本机实际出口网卡。
+6. 该示例假设服务器由这组 iptables 规则管理转发流量。若 UFW、云防火墙代理或其他防火墙管理器同时管理 FORWARD/NAT，必须按其规则体系配置，避免规则冲突。
+7. 不要直接覆盖原有防火墙配置。应用前先备份现有规则，并保留当前 SSH 会话及控制台恢复方式。
 
 ## 7.3 设置文件权限
 
@@ -575,16 +574,14 @@ TCP 5201 只在测速期间临时开放。
 ## 8.2 检查 UFW
 
 ```bash
-ufw status numbered
+ufw status verbose
 ```
 
-此前某次历史测试中 UFW 状态为 inactive。
+此前项目某次测试环境中 UFW 为 inactive；这只是当时的状态，不代表所有服务器都应该关闭防火墙。
 
-这只是当时服务器的状态，不代表所有服务器都应该关闭防火墙。
+本节 `wg0.conf` 示例使用显式 iptables 转发和 NAT 规则。如果服务器启用了 UFW，不要假设这些规则自动绕过 UFW 的转发策略。应先按 Ubuntu/UFW 的方式配置路由放行与 NAT，并确认 `DEFAULT_FORWARD_POLICY`、`ufw route` 规则和 `/etc/ufw/before.rules` 中的 NAT 设置相互一致；或者选择统一由 iptables 管理，不要让两套规则互相覆盖。
 
-如果使用 UFW，必须先确认 SSH 端口放行，并针对转发流量配置对应的路由规则。
-
-不要在没有检查 SSH 规则的情况下直接启用 UFW，以免失去远程连接。
+启用或修改 UFW 前，先放行实际 SSH 端口并从第二个终端验证新 SSH 会话，避免失去远程管理能力。
 
 ---
 
@@ -653,15 +650,17 @@ AllowedIPs = 10.66.66.3/32
 
 ## 9.4 二维码导入
 
-服务器端可以使用：
+客户端配置文件应在可信的客户端设备上生成和保存。不要为了生成二维码而把客户端私钥传到 VPS。
+
+如果你在本地 Linux 或 WSL 环境中保存了 `client1.conf`，可以在本地安装 `qrencode` 后执行：
 
 ```bash
 qrencode -t ansiutf8 < client1.conf
 ```
 
-然后用手机 WireGuard 扫描。
+然后用手机 WireGuard 扫描终端中的二维码。也可以通过 WireGuard 客户端的文件导入功能导入配置。
 
-注意：二维码包含客户端私钥，不要随意分享。
+注意：二维码包含客户端私钥，等同于一份可用的 VPN 凭据。只在可信设备上显示和扫描，不要截图上传、公开分享或提交到 GitHub。
 
 ---
 
@@ -900,47 +899,53 @@ timeout 20 tcpdump -ni any \
 
 速度测试可以判断 VPN 的实际网络性能。
 
-## 14.1 服务端启动 iperf3
+## 14.1 测试 VPN 隧道到 VPS 的吞吐量
+
+在 VPS 上让 iperf3 只监听 WireGuard 隧道地址，避免把临时测速服务暴露到公网：
 
 ```bash
-iperf3 -s
+iperf3 -s -B 10.66.66.1
 ```
 
-默认监听 TCP 5201。
-
-## 14.2 客户端测试上传
+默认监听 TCP 5201。客户端连接 VPN 后，在客户端运行：
 
 ```powershell
-iperf3 -c YOUR_TEST_SERVER_IP -p 5201 -P 4 -t 30
+iperf3 -c 10.66.66.1 -p 5201 -t 30
 ```
 
-参数：
+该测试的目标地址是服务端隧道 IP `10.66.66.1`，因此测试流量会通过 WireGuard 隧道到达 VPS。
 
-- -c：指定测试服务器。
-- -p：指定端口。
-- -P 4：四路并发。
-- -t 30：测试30秒。
-
-如果要测试 VPN 吞吐量，测试流量必须实际经过 VPN，并且测试服务端应当可以从 VPN 客户端访问。
-
-## 14.3 测试下载
+## 14.2 测试下载方向
 
 ```powershell
-iperf3 -c YOUR_TEST_SERVER_IP -p 5201 -P 4 -t 30 -R
+iperf3 -c 10.66.66.1 -p 5201 -t 30 -R
 ```
 
-## 14.4 单路 TCP 测试
+`-R` 会反转数据方向，由服务端向客户端发送数据。
+
+## 14.3 单路与多路对比
+
+单路测试：
 
 ```powershell
-iperf3 -c YOUR_TEST_SERVER_IP -p 5201 -t 30
+iperf3 -c 10.66.66.1 -p 5201 -t 30
 ```
 
-建议分别测试：
+四路并发：
 
-- 单路上传。
-- 单路下载。
-- 四路上传。
-- 四路下载。
+```powershell
+iperf3 -c 10.66.66.1 -p 5201 -P 4 -t 30
+```
+
+建议分别记录单路上传、单路下载、四路上传和四路下载。`-P 4` 表示四条并行数据流；多路结果不一定高于单路，实际表现取决于 CPU、拥塞控制和链路条件。
+
+## 14.4 测试 VPN 出口到互联网的吞吐量
+
+如果要测试 VPN 出口访问互联网的性能，需要使用你自己控制、位于 VPS 之外的 iperf3 测试端点，并确认客户端到该端点的路由确实经过 VPN。测试端点需要运行 `iperf3 -s`，并且只向可信客户端开放 TCP 5201。不要把 VPS 公网地址误当成“外部互联网测试端点”。
+
+## 14.5 测试结束
+
+完成测试后在 iperf3 服务端按 `Ctrl + C` 停止服务，并确认临时开放的 TCP 5201 规则已关闭。
 
 ## 14.5 历史实测数据
 
@@ -953,11 +958,9 @@ iperf3 -c YOUR_TEST_SERVER_IP -p 5201 -t 30
 | 单路 TCP 重传 | 0 |
 | 四路并发测试 | 43.4 Mbit/s |
 | 测试工具 | iperf3 |
-| 历史测试地址 | 89.42.95.182:5201 |
+| 历史测试目标 | 当时使用的 iperf3 测试端点（具体地址不在公开教程中披露） |
 
-以上数据来自当时的测试记录。
-
-需要说明：历史记录能够确认客户端连接到了该 iperf3 测试地址，但不能仅凭该记录断言所有测试都经过同一台 WireGuard VPN 服务器。复现时应记录测试路径、方向和网络环境。
+以上数据来自当时的项目测试记录。单路和四路结果来自不同测试记录，测试端点、方向及链路条件未能完全统一，因此不能直接据此判断多路并发一定比单路慢，也不能将这些数值视为服务器的固定性能指标。复现实验时，应记录测试端点、是否经过隧道、方向、并发数、持续时间和测试时段。
 
 测试结束后关闭 iperf3：
 
@@ -1409,6 +1412,6 @@ The key to a reliable VPN is not simply establishing a WireGuard handshake. It i
 
 **文章类型 | Article Type:** Technical Guide / Infrastructure
 
-**版本 | Version:** 1.0
+**版本 | Version:** 1.0.1
 
 **最后更新 | Last Updated:** November 22, 2026
