@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1260 160" role="img" aria-labelledby="title">
+  <title id="title">BILL'S DIGITAL WORLD</title>
+  <defs>
+    <linearGradient id="b" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1558f5"/>
+      <stop offset="1" stop-color="#0735b8"/>
+    </linearGradient>
+    <linearGradient id="slash" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#16b8ff"/>
+      <stop offset="1" stop-color="#42d4ff"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#b)" fill-rule="evenodd" d="M18 14h43c37 0 42 38 12 52 33 12 23 62-14 62H18z M43 32h17c14 0 15 21-1 22H43z M43 85h17c17 0 16 23-1 23H43z"/>
+  <path fill="url(#slash)" d="M7 111 88 66 76 82 23 132z"/>
+  <text x="170" y="106" fill="#f3f6ff" font-family="Inter,Arial,sans-serif" font-size="84" font-weight="800" letter-spacing="1">BILL'S</text>
+  <text x="455" y="106" fill="#286cff" font-family="Inter,Arial,sans-serif" font-size="84" font-weight="800" letter-spacing="1">DIGITAL WORLD</text>
+</svg>
