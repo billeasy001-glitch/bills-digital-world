@@ -2,19 +2,54 @@
 import Base from '../layouts/Base.astro';
 import EntryList from '../components/EntryList.astro';
 ---
-<Base title="BILL'S DIGITAL WORLD" description="Bill 的个人数字门户。探索 AI 与经营实践，阅读技术笔记，找到适合具体任务的工具。">
-  <section class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow"><i></i> BILL 的个人数字门户</p>
-      <h1 lang="en">Bill’s<br /><em>Digital World.</em></h1>
-      <p class="intro">我把 AI、软件和日常经营中的实验，整理成项目、教程与可以直接使用的工具笔记。</p>
-      <div class="actions"><a class="button" href="/projects/">浏览项目</a><a class="text-link" href="/blog/">阅读笔记</a></div>
-    </div>
-    <figure class="plate">
-      <img src="/orbit.jpg" width="1000" height="730" alt="由密集铜色曲线勾勒的扭转环面" fetchpriority="high" />
-      <figcaption><span>扭转环面</span><span lang="en">PARAMETRIC STUDY</span></figcaption>
-    </figure>
-  </section>
-  <section class="shelf"><div class="section-head"><div><p class="eyebrow">PROJECTS</p><h2>项目手记</h2></div><a class="text-link" href="/projects/">全部项目</a></div><EntryList section="projects" limit={3} /></section>
-  <section class="shelf"><div class="section-head"><div><p class="eyebrow">FIELD NOTES</p><h2>最新教程</h2></div><a class="text-link" href="/blog/">全部笔记</a></div><EntryList section="blog" limit={2} /></section>
+<Base title="BILL'S DIGITAL WORLD" description="Bill 的个人数字门户。探索 AI、产品开发、自动化与数字商业，把想法变成真实项目，分享实践与工具。">
+  <div class="home-page">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><i></i> PERSONAL DIGITAL WORKSPACE</p>
+        <p class="hero-kicker">BILL'S DIGITAL WORLD</p>
+        <h1>把想法，<br /><span>变成现实。</span></h1>
+        <p class="intro">探索 AI、产品开发、自动化与数字商业。记录真实实践，把有价值的想法变成可以使用的产品、项目与工具。</p>
+        <div class="actions">
+          <a class="button" href="/projects/">探索我的项目 <span aria-hidden="true">↗</span></a>
+          <a class="text-link" href="/blog/">阅读最新文章</a>
+        </div>
+      </div>
+      <div class="hero-visual" role="img" aria-label="由蓝色轨道与光环构成的数字科技视觉图形">
+        <div class="visual-grid" aria-hidden="true"></div>
+        <div class="visual-orbit orbit-one" aria-hidden="true"></div>
+        <div class="visual-orbit orbit-two" aria-hidden="true"></div>
+        <div class="visual-orbit orbit-three" aria-hidden="true"></div>
+        <div class="visual-core" aria-hidden="true">
+          <strong>B</strong>
+          <span>IDEAS INTO SYSTEMS</span>
+        </div>
+        <div class="visual-tag tag-top"><span>01 / BUILD</span><strong>Products & Projects</strong></div>
+        <div class="visual-tag tag-bottom"><span>02 / AUTOMATE</span><strong>AI · Code · Workflows</strong></div>
+        <p class="visual-caption">THINK CLEARLY. BUILD USEFULLY.</p>
+      </div>
+    </section>
+
+    <section class="feature-strip" aria-label="网站内容方向">
+      <div class="feature-item"><span>01 / BUILD</span><strong>项目与产品</strong><p>从想法到可用成果</p></div>
+      <div class="feature-item"><span>02 / EXPLORE</span><strong>AI 与自动化</strong><p>工具、智能体与工作流</p></div>
+      <div class="feature-item"><span>03 / SHARE</span><strong>知识与实践</strong><p>真实经验与可复用教程</p></div>
+    </section>
+
+    <section class="shelf home-projects">
+      <div class="section-head">
+        <div><p class="eyebrow">SELECTED PROJECTS</p><h2>正在构建</h2><p class="section-description">持续推进中的产品、实验与数字化项目。</p></div>
+        <a class="text-link" href="/projects/">全部项目 <span aria-hidden="true">↗</span></a>
+      </div>
+      <EntryList section="projects" limit={3} />
+    </section>
+
+    <section class="shelf latest-articles">
+      <div class="section-head">
+        <div><p class="eyebrow">LATEST ARTICLES</p><h2>最新文章</h2><p class="section-description">按发布时间自动排序，持续更新的技术教程与实践笔记。</p></div>
+        <a class="text-link" href="/blog/">全部文章 <span aria-hidden="true">↗</span></a>
+      </div>
+      <EntryList section="blog" limit={3} />
+    </section>
+  </div>
 </Base>
