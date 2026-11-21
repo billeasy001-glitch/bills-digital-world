@@ -10,8 +10,19 @@ export type Section = keyof typeof sections;
 export const sectionKeys = Object.keys(sections) as Section[];
 export async function entries(section: Section) {
   const rows = await getCollection(section);
-  return rows.filter(row => !row.data.draft).sort((a, b) =>
-    b.data.date.valueOf() - a.data.date.valueOf() || a.id.localeCompare(b.id, 'en'));
+  return rows.filter(row => !row.data.draft).sort((a, b) => {
+    const publishedA = (a.data.publishedAt ?? a.data.date).valueOf();
+    const publishedB = (b.data.publishedAt ?? b.data.date).valueOf();
+    return publishedB - publishedA || a.id.localeCompare(b.id, 'en');
+  });
 }
 export const github = 'https://github.com/billeasy001-glitch/bills-digital-world';
-export const dateLabel = (date: Date) => date.toISOString().slice(0, 10);
+export const dateLabel = (date: Date, publishedAt?: Date) => {
+  if (!publishedAt) return date.toISOString().slice(0, 10);
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+  }).formatToParts(publishedAt);
+  const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day} ${values.hour}:${values.minute}:${values.second} UTC+8`;
+};
