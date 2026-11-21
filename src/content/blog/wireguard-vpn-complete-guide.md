@@ -3,6 +3,7 @@ title: "从零搭建自己的 VPN 服务器：WireGuard 完整搭建与稳定性
 description: "从 VPS 服务器选购、Ubuntu 初始化、SSH 连接，到 WireGuard 安装、客户端配置、握手验证、NAT、MTU 优化、速度测试和长期稳定性测试。A practical bilingual guide to deploying and optimizing WireGuard on Ubuntu."
 category: "技术教程 / Technology"
 date: 2026-11-22
+publishedAt: 2026-11-22T01:45:19+08:00
 draft: false
 ---
 
