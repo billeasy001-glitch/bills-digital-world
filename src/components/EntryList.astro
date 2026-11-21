@@ -7,7 +7,7 @@ const rows = (await entries(section)).slice(0, limit);
 <ul class="entries">
   {rows.map(({ id, data }) => <li>
     <a href={`/${section}/${id}/`}>
-      <div class="entry-meta"><span>{data.category}</span><time datetime={dateLabel(data.date)}>{dateLabel(data.date)}</time></div>
+      <div class="entry-meta"><span>{data.category}</span><time datetime={(data.publishedAt ?? data.date).toISOString()}>{dateLabel(data.date, data.publishedAt)}</time></div>
       <h3>{data.title}</h3><p>{data.description}</p>
     </a>
   </li>)}
